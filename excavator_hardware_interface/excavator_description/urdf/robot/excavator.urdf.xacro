@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="excavator">
+    <xacro:arg name="add_world" default="true"/>
+    <xacro:arg name="base_link" default="base_link"/>
+    <xacro:arg name="use_lidar" default="false"/>
+    <xacro:arg name="use_gazebo" default="false"/>
+
+
+    <xacro:if value="$(arg add_world)">
+        <link name="world"/>
+        <joint name="virtual_joint" type="fixed">
+            <parent link="world"/>
+            <child link="$(arg base_link)"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </joint>
+    </xacro:if>
+
+
+    <xacro:include filename="$(find excavator_hardware_interface)/excavator_description/urdf/mech/excavator_mech.urdf.xacro"/>
+    <xacro:excavator
+            base_link="$(arg base_link)">
+    </xacro:excavator>
+
+
+    <xacro:include filename="$(find excavator_hardware_interface)/excavator_description/urdf/control/gazebo_sim_ros2_control.urdf.xacro" />
+    <xacro:load_gazebo_sim_ros2_control_plugin
+            use_gazebo="$(arg use_gazebo)"/>
+
+    <xacro:include filename="$(find excavator_hardware_interface)/excavator_description/urdf/control/excavator_ros2_control.urdf.xacro" />
+    <xacro:excavator_ros2_control
+            use_gazebo="$(arg use_gazebo)"/>
+
+    <xacro:include filename="$(find excavator_hardware_interface)/excavator_description/urdf/sensors/lidar.urdf.xacro"/>
+    <xacro:lidar
+        parent_link="cabin_link"
+        use_lidar="arg use_lidar"
+        use_gazebo="arg use_gazebo">
+        <origin xyz="0 0 1.5" rpy="0 0 0"/>
+    </xacro:lidar>
+
+</robot>

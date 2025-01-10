@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="lidar" params="parent_link use_lidar use_gazebo *origin">
+
+    <xacro:if value="${'true' == '$(arg use_lidar)' and 'true' == '$(arg use_gazebo)'}">
+
+      <xacro:property name="M_PI" value="3.1415926535897931" />
+
+      <xacro:property name="lidar_rate" value="10.0"/>
+      <xacro:property name="lidar_min_dist" value="0.2"/>
+      <xacro:property name="lidar_max_dist" value="130.0"/>
+      <xacro:property name="lidar_field_view_horizontal_max" value="3.14159"/>
+      <xacro:property name="lidar_field_view_horizontal_min" value="-3.14159"/>
+      <xacro:property name="lidar_field_view_vertical_max" value="0.785398"/>
+      <xacro:property name="lidar_field_view_vertical_min" value="-0.785398"/>
+      <xacro:property name="horizontal_resolution" value="0.18"/>
+      <xacro:property name="lidar_resolution" value="720"/>
+      <xacro:property name="lidar_channels" value="64"/>
+
+
+
+      <link name="lidar_link">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <mass value="0.125"/>
+          <inertia ixx="0.001"  ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+        </inertial>
+
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <cylinder radius="0.0508" length="0.055"/>
+          </geometry>
+        </collision>
+
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <cylinder radius="0.0508" length="0.055"/>
+          </geometry>
+        </visual>
+      </link>
+
+      <joint name="lidar_joint" type="fixed">
+        <parent link="${parent_link}"/>
+        <child link="lidar_link"/>
+        <xacro:insert_block name="origin"/>
+      </joint>
+
+      <gazebo reference="lidar_link">
+        <sensor type="gpu_lidar" name="ouster_lidar">
+          <pose>0 0 0 0 0 0</pose>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>${lidar_resolution}</samples>
+                <resolution>1</resolution>
+                <min_angle>${lidar_field_view_horizontal_min}</min_angle>
+                <max_angle>${lidar_field_view_horizontal_max}</max_angle>
+              </horizontal>
+              <vertical>
+                <samples>${lidar_channels}</samples>
+                <resolution>1</resolution>
+                <min_angle>${lidar_field_view_vertical_min}</min_angle>
+                <max_angle>${lidar_field_view_vertical_max}</max_angle>
+              </vertical>
+            </scan>
+            <range>
+              <min>${lidar_min_dist}</min>
+              <max>${lidar_max_dist}</max>
+              <resolution>0.001</resolution>
+            </range>
+<!--            <noise>-->
+<!--              <type>gaussian</type>-->
+<!--              <mean>${mean}</mean>-->
+<!--              <stddev>${stddev}</stddev>-->
+<!--            </noise>-->
+          </ray>
+          <update_rate>${lidar_rate}</update_rate>
+          <always_on>1</always_on>
+          <visualize>true</visualize>
+          <topic>lidar</topic>
+          <gz_frame_id>lidar_link</gz_frame_id>
+        </sensor>
+      </gazebo>
+
+
+
+    </xacro:if>
+  </xacro:macro>
+</robot>

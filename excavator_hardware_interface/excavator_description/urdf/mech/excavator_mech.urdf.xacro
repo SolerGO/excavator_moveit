@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<!-- Basic differential drive mobile base -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="joint_effort" value="56.0"/>
+  <xacro:property name="joint_velocity" value="2.792527"/>
+  <xacro:property name="joint_damping" value="0.0"/>
+  <xacro:property name="joint_friction" value="0.0"/>
+
+  <xacro:property name="base_mass" value="0.12"/>
+  <xacro:property name="cabin_mass" value="0.19"/>
+  <xacro:property name="arm1_mass" value="0.16"/>
+  <xacro:property name="arm2_mass" value="0.124"/>
+  <xacro:property name="ladle_mass" value="0.11"/>
+
+  <xacro:macro name="link_inertial" params="mass ixx iyy izz">
+    <inertial>
+      <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      <mass value="${mass}"/>
+      <inertia
+              ixx="${ixx}" ixy="0.0" ixz="0.0"
+              iyy="${iyy}" iyz="0.0"
+              izz="${izz}"/>
+    </inertial>
+  </xacro:macro>
+
+
+
+  <xacro:macro name="material_visual" params="ref_link ambient diffuse specular">
+    <gazebo reference="${ref_link}">
+      <visual>
+        <material>
+          <ambient>${ambient}</ambient>
+          <diffuse>${diffuse}</diffuse>
+          <specular>${specular}</specular>
+        </material>
+      </visual>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="excavator" params="base_link">
+
+    <!-- Robot Base -->
+    <link name="base_link">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Down.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Down.stl"/>
+        </geometry>
+      </collision>
+      <xacro:link_inertial mass="${base_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
+    </link>
+
+    <link name="cabin_link">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Cabin.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Cabin.stl"/>
+        </geometry>
+      </collision>
+      <xacro:link_inertial mass="${cabin_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
+    </link>
+
+    <link name="arm_one_link">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Arm1.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Arm1.stl"/>
+        </geometry>
+      </collision>
+      <xacro:link_inertial mass="${arm1_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
+    </link>
+
+    <link name="arm_two_link">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Arm2.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Arm2.stl"/>
+        </geometry>
+      </collision>
+      <xacro:link_inertial mass="${arm2_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
+    </link>
+
+    <link name="ladle_link">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Ladle2.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Ladle2.stl"/>
+        </geometry>
+      </collision>
+      <xacro:link_inertial mass="${ladle_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
+    </link>
+
+    <joint name="cabin_joint" type="revolute">
+      <parent link="base_link"/>
+      <child link="cabin_link"/>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <limit effort="${joint_effort}" lower="-1.56" upper="1.56" velocity="${joint_velocity}"/>
+
+      <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="arm_one_joint" type="revolute">
+      <parent link="cabin_link"/>
+      <child link="arm_one_link"/>
+      <origin xyz="0.95 -0.17 -0.28" rpy="0 0 0"/>
+      <limit effort="${joint_effort}" lower="-1.6" upper="0.0" velocity="${joint_velocity}"/>
+      <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+
+
+
+    <joint name="arm_two_joint" type="revolute">
+      <parent link="arm_one_link"/>
+      <child link="arm_two_link"/>
+      <origin xyz="2.66 0.0 -0.62" rpy="0 0 0"/>
+      <limit effort="${joint_effort}" lower="-1.6" upper="0.0" velocity="${joint_velocity}"/>
+      <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+
+
+
+    <joint name="ladle_joint" type="revolute">
+      <parent link="arm_two_link"/>
+      <child link="ladle_link"/>
+      <origin xyz="-1.755 0.0 -0.065" rpy="0 0 0"/>
+      <limit effort="${joint_effort}" lower="-1.6" upper="0.0" velocity="${joint_velocity}"/>
+      <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="tool0"/>
+
+    <joint name="joint_tool0" type="fixed">
+      <parent link="ladle_link"/>
+      <child link="tool0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </joint>
+
+    <xacro:material_visual ref_link="base_link" ambient="0.5 0.5 0.5 1" diffuse="0.5 0.5 0.5 1" specular="0.5 0.5 0.5 1"/>
+    <xacro:material_visual ref_link="cabin_link" ambient="1 1 1 1" diffuse="1 1 1 1" specular="1 1 1 1"/>
+    <xacro:material_visual ref_link="arm1_link" ambient="1 1 1 1" diffuse="1 1 1 1" specular="1 1 1 1"/>
+    <xacro:material_visual ref_link="arm2_link" ambient="1 1 1 1" diffuse="1 1 1 1" specular="1 1 1 1"/>
+    <xacro:material_visual ref_link="ladle_link" ambient="1 1 1 1" diffuse="1 1 1 1" specular="1 1 1 1"/>
+
+  </xacro:macro>
+
+
+</robot>

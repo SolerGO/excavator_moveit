@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <xacro:macro name="excavator_ros2_control" params="use_gazebo">
+        <ros2_control name="RobotSystem" type="system">
+            <hardware>
+                <xacro:if value="${use_gazebo}">
+                    <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+                </xacro:if>
+            </hardware>
+
+            <joint name="cabin_joint">
+                <command_interface name="position">
+                    <param name="min">-1.56</param>
+                    <param name="max">1.56</param>
+                </command_interface>
+                <state_interface name="position"/>
+            </joint>
+
+            <joint name="arm_one_joint">
+                <command_interface name="position">
+                    <param name="min">-1.6</param>
+                    <param name="max">0.0</param>
+                </command_interface>
+                <state_interface name="position"/>
+            </joint>
+
+            <joint name="arm_two_joint">
+                <command_interface name="position">
+                    <param name="min">-1.6</param>
+                    <param name="max">0.0</param>
+                </command_interface>
+                <state_interface name="position"/>
+            </joint>
+
+            <joint name="ladle_joint">
+                <command_interface name="position">
+                    <param name="min">-1.6</param>
+                    <param name="max">0.0</param>
+                </command_interface>
+                <state_interface name="position"/>
+            </joint>
+
+        </ros2_control>
+    </xacro:macro>
+
+</robot>

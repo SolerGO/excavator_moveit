@@ -1,0 +1,7 @@
+# Default initial positions for excavator's ros2_control fake system
+
+initial_positions:
+  arm_one_joint: 0
+  arm_two_joint: 0
+  cabin_joint: 0
+  ladle_joint: 0

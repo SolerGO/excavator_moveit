@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="excavator">
+    <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
+
+    <!-- Import excavator urdf file -->
+    <xacro:include filename="$(find excavator_hardware_interface)/excavator_description/urdf/robot/excavator.urdf.xacro" />
+
+    <!-- Import control_xacro -->
+    <xacro:include filename="excavator.ros2_control.xacro" />
+
+
+    <xacro:excavator_ros2_control name="FakeSystem" initial_positions_file="$(arg initial_positions_file)"/>
+
+</robot>
