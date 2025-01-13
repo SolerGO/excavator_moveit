@@ -7,7 +7,7 @@ moveit_setup_assistant_config:
   package_settings:
     author_name: SolerGO
     author_email: solergaming555@gmail.com
-    generated_timestamp: 1736523380
+    generated_timestamp: 1736634269
   control_xacro:
     command:
       - position

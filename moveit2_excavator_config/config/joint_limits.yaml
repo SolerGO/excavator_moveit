@@ -10,21 +10,45 @@ default_acceleration_scaling_factor: 0.1
 joint_limits:
   arm_one_joint:
     has_velocity_limits: true
-    max_velocity: 2.7925270000000002
-    has_acceleration_limits: false
-    max_acceleration: 0
+    max_velocity: 2.792527
+    has_acceleration_limits: true
+    max_acceleration: 5.0
+    has_deceleration_limits: true
+    max_deceleration: -5.0
+    has_jerk_limits: false
+    max_jerk: 6.0
+    has_effort_limits: true
+    max_effort: 56.0
   arm_two_joint:
     has_velocity_limits: true
-    max_velocity: 2.7925270000000002
-    has_acceleration_limits: false
-    max_acceleration: 0
+    max_velocity: 2.792527
+    has_acceleration_limits: true
+    max_acceleration: 5.0
+    has_deceleration_limits: true
+    max_deceleration: -5.0
+    has_jerk_limits: false
+    max_jerk: 6.0
+    has_effort_limits: true
+    max_effort: 56.0
   cabin_joint:
     has_velocity_limits: true
-    max_velocity: 2.7925270000000002
-    has_acceleration_limits: false
-    max_acceleration: 0
+    max_velocity: 2.792527
+    has_acceleration_limits: true
+    max_acceleration: 5.0
+    has_deceleration_limits: true
+    max_deceleration: -5.0
+    has_jerk_limits: false
+    max_jerk: 6.0
+    has_effort_limits: true
+    max_effort: 56.0
   ladle_joint:
     has_velocity_limits: true
-    max_velocity: 2.7925270000000002
-    has_acceleration_limits: false
-    max_acceleration: 0
+    max_velocity: 2.792527
+    has_acceleration_limits: true
+    max_acceleration: 5.0
+    has_deceleration_limits: true
+    max_deceleration: -5.0
+    has_jerk_limits: false
+    max_jerk: 6.0
+    has_effort_limits: true
+    max_effort: 56.0

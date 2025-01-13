@@ -1,9 +1,11 @@
 {
   "name": "ROS2 Gazebo and Moveit Container",
   "dockerFile": "Dockerfile",
+  "privileged": true,
   "runArgs": [
-    "--privileged",
     "--network=host",
+    "--pid=host",
+    "--ipc=host",
     "-e", "DISPLAY=${env:DISPLAY}",
     "-e", "NVIDIA_VISIBLE_DEVICES=all",
     "-e", "NVIDIA_DRIVER_CAPABILITIES=all",
@@ -12,7 +14,8 @@
     "--runtime=nvidia",
     "--gpus=all"
   ],
-  "workspaceMount": "source=${localWorkspaceFolder}/..,target=/ws,type=bind",
+  
+  "workspaceMount": "source=${localWorkspaceFolder}/../..,target=/ws,type=bind",
   "workspaceFolder": "/ws",
   "mounts": [
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
@@ -22,6 +25,11 @@
     "jetbrains" : {
       "backend" : "IntelliJ"
     }
-  }
-
+  },
+  "containerEnv": {
+        "DISPLAY": "unix:0",
+        "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
+        "ROS_DOMAIN_ID": "42"
+  },
+  "overrideCommand": false
 }

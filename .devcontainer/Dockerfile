@@ -19,7 +19,7 @@ RUN apt-get update
 
 #Install ros_qz
 RUN apt-get update &&\
-    apt-get install -y \
+    apt install -y \
     ros-jazzy-ros-gz \
     ros-jazzy-moveit \
     ros-jazzy-joint-state-publisher \
@@ -29,12 +29,17 @@ RUN apt-get update &&\
     ros-jazzy-ros2-control \
     ros-jazzy-ros2-controllers \
     ros-jazzy-gz-ros2-control \
-    ros-humble-moveit-planners-chomp
+    ros-jazzy-moveit-planners-chomp
 
 
 # Source the ROS setup file
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+#RUN #echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 
 ################################
 ## ADD ANY CUSTOM SETUP BELOW ##
 ################################
+
+# Setup entrypoint
+COPY ./ros_entrypoint.sh /
+ENTRYPOINT ["/ros_entrypoint.sh"]
+CMD ["/bin/bash"]
