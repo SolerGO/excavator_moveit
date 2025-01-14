@@ -6,14 +6,14 @@
     <xacro:arg name="use_gazebo" default="false"/>
 
 
-    <xacro:if value="$(arg add_world)">
-        <link name="world"/>
-        <joint name="virtual_joint" type="fixed">
-            <parent link="world"/>
-            <child link="$(arg base_link)"/>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-        </joint>
-    </xacro:if>
+<!--    <xacro:if value="$(arg add_world)">-->
+<!--        <link name="base_footprint"/>-->
+<!--        <joint name="base_joint" type="fixed">-->
+<!--            <parent link="base_footprint"/>-->
+<!--            <child link="$(arg base_link)"/>-->
+<!--            <origin xyz="0 0 0" rpy="0 0 0"/>-->
+<!--        </joint>-->
+<!--    </xacro:if>-->
 
 
     <xacro:include filename="$(find excavator_hardware_interface)/excavator_description/urdf/mech/excavator_mech.urdf.xacro"/>

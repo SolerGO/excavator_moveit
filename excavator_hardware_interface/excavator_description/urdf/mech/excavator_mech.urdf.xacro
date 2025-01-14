@@ -2,7 +2,7 @@
 <!-- Basic differential drive mobile base -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:property name="joint_effort" value="56.0"/>
+  <xacro:property name="joint_effort" value="30.0"/>
   <xacro:property name="joint_velocity" value="2.792527"/>
   <xacro:property name="joint_damping" value="0.0"/>
   <xacro:property name="joint_friction" value="0.0"/>
@@ -13,16 +13,68 @@
   <xacro:property name="arm2_mass" value="0.124"/>
   <xacro:property name="ladle_mass" value="0.11"/>
 
+  <xacro:property name="wheel_radius" value="0.15"/>
+  <xacro:property name="wheel_width" value="0.1"/>
+  <xacro:property name="wheel_xoff" value="1.08"/>
+  <xacro:property name="wheel_zoff" value="-1.15"/>
+  <xacro:property name="wheel_ygap" value="0.5"/>
+
+
   <xacro:macro name="link_inertial" params="mass ixx iyy izz">
     <inertial>
       <origin xyz="0 0 0.0" rpy="0 0 0"/>
       <mass value="${mass}"/>
       <inertia
-              ixx="${ixx}" ixy="0.0" ixz="0.0"
-              iyy="${iyy}" iyz="0.0"
-              izz="${izz}"/>
+          ixx="${ixx}" ixy="0.0" ixz="0.0"
+          iyy="${iyy}" iyz="0.0"
+          izz="${izz}"/>
     </inertial>
   </xacro:macro>
+
+  <xacro:macro name="cylinder_inertia" params="mass length radius *origin">
+    <inertial>
+      <xacro:insert_block name="origin"/>
+      <mass value="${mass}" />
+      <inertia ixx="${(1/12) * mass * (3*radius*radius + length*length)}" ixy="0.0" ixz="0.0"
+               iyy="${(1/12) * mass * (3*radius*radius + length*length)}" iyz="0.0"
+               izz="${(1/2) * mass * (radius*radius)}" />
+    </inertial>
+  </xacro:macro>
+
+
+  <xacro:macro name="wheel" params="prefix x_reflect y_reflect">
+    <link name="${prefix}_link">
+<!--    <visual>-->
+<!--      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>-->
+<!--      <geometry>-->
+<!--        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>-->
+<!--      </geometry>-->
+<!--      <material name="Gray">-->
+<!--        <color rgba="0.5 0.5 0.5 1.0"/>-->
+<!--      </material>-->
+<!--    </visual>-->
+    <collision>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+
+    <xacro:cylinder_inertia mass="0.05" length="${wheel_width}" radius="${wheel_radius}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:cylinder_inertia>
+    <!--      <xacro:cylinder_inertia m="0.1" r="${wheel_radius}" h="${wheel_width}"/>-->
+    </link>
+
+    <joint name="${prefix}_joint" type="revolute">
+      <parent link="base_link"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="${x_reflect*wheel_xoff} ${y_reflect*(1.0/2+wheel_ygap)} ${wheel_zoff}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="30" velocity="1.0" lower="-1.79769e+38" upper="1.79769e+38" />
+    </joint>
+  </xacro:macro>
+
 
 
 
@@ -42,73 +94,73 @@
 
     <!-- Robot Base -->
     <link name="base_link">
-      <visual>
-        <geometry>
-          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Down.dae"/>
-        </geometry>
-      </visual>
-      <collision>
-        <geometry>
-          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Down.stl"/>
-        </geometry>
-      </collision>
-      <xacro:link_inertial mass="${base_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Down.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Down.stl"/>
+      </geometry>
+    </collision>
+    <xacro:link_inertial mass="${base_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
     </link>
 
     <link name="cabin_link">
-      <visual>
-        <geometry>
-          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Cabin.dae"/>
-        </geometry>
-      </visual>
-      <collision>
-        <geometry>
-          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Cabin.stl"/>
-        </geometry>
-      </collision>
-      <xacro:link_inertial mass="${cabin_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Cabin.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Cabin.stl"/>
+      </geometry>
+    </collision>
+    <xacro:link_inertial mass="${cabin_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
     </link>
 
     <link name="arm_one_link">
-      <visual>
-        <geometry>
-          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Arm1.dae"/>
-        </geometry>
-      </visual>
-      <collision>
-        <geometry>
-          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Arm1.stl"/>
-        </geometry>
-      </collision>
-      <xacro:link_inertial mass="${arm1_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Arm1.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Arm1.stl"/>
+      </geometry>
+    </collision>
+    <xacro:link_inertial mass="${arm1_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
     </link>
 
     <link name="arm_two_link">
-      <visual>
-        <geometry>
-          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Arm2.dae"/>
-        </geometry>
-      </visual>
-      <collision>
-        <geometry>
-          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Arm2.stl"/>
-        </geometry>
-      </collision>
-      <xacro:link_inertial mass="${arm2_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Arm2.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Arm2.stl"/>
+      </geometry>
+    </collision>
+    <xacro:link_inertial mass="${arm2_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
     </link>
 
     <link name="ladle_link">
-      <visual>
-        <geometry>
-          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Ladle2.dae"/>
-        </geometry>
-      </visual>
-      <collision>
-        <geometry>
-          <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Ladle2.stl"/>
-        </geometry>
-      </collision>
-      <xacro:link_inertial mass="${ladle_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/visual/Ladle2.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://$(find excavator_hardware_interface)/excavator_description/meshes/collision/Ladle2.stl"/>
+      </geometry>
+    </collision>
+    <xacro:link_inertial mass="${ladle_mass}" ixx="0.000148" iyy="0.000148" izz="0.000096"/>
     </link>
 
     <joint name="cabin_joint" type="revolute">
@@ -116,7 +168,7 @@
       <child link="cabin_link"/>
       <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
       <limit effort="${joint_effort}" lower="-1.56" upper="1.56" velocity="${joint_velocity}"/>
-
+      <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
       <axis xyz="0 0 1"/>
     </joint>
 
@@ -124,7 +176,7 @@
       <parent link="cabin_link"/>
       <child link="arm_one_link"/>
       <origin xyz="0.95 -0.17 -0.28" rpy="0 0 0"/>
-      <limit effort="${joint_effort}" lower="-1.6" upper="0.0" velocity="${joint_velocity}"/>
+      <limit effort="${joint_effort}" lower="-1.6" upper="0.0001" velocity="${joint_velocity}"/>
       <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
       <axis xyz="0 1 0"/>
     </joint>
@@ -135,7 +187,7 @@
       <parent link="arm_one_link"/>
       <child link="arm_two_link"/>
       <origin xyz="2.66 0.0 -0.62" rpy="0 0 0"/>
-      <limit effort="${joint_effort}" lower="-1.6" upper="0.0" velocity="${joint_velocity}"/>
+      <limit effort="${joint_effort}" lower="-1.6" upper="0.0001" velocity="${joint_velocity}"/>
       <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
       <axis xyz="0 1 0"/>
     </joint>
@@ -146,7 +198,7 @@
       <parent link="arm_two_link"/>
       <child link="ladle_link"/>
       <origin xyz="-1.755 0.0 -0.065" rpy="0 0 0"/>
-      <limit effort="${joint_effort}" lower="-1.6" upper="0.0" velocity="${joint_velocity}"/>
+      <limit effort="${joint_effort}" lower="-1.6" upper="0.0001" velocity="${joint_velocity}"/>
       <dynamics damping="${joint_damping}" friction="${joint_friction}"/>
       <axis xyz="0 1 0"/>
     </joint>
@@ -164,6 +216,52 @@
     <xacro:material_visual ref_link="arm1_link" ambient="1 1 1 1" diffuse="1 1 1 1" specular="1 1 1 1"/>
     <xacro:material_visual ref_link="arm2_link" ambient="1 1 1 1" diffuse="1 1 1 1" specular="1 1 1 1"/>
     <xacro:material_visual ref_link="ladle_link" ambient="1 1 1 1" diffuse="1 1 1 1" specular="1 1 1 1"/>
+
+<!--    <xacro:wheel prefix="wheel_front_left" x_reflect="1" y_reflect="1"/>-->
+<!--    <xacro:wheel prefix="wheel_rear_left" x_reflect="-1" y_reflect="1"/>-->
+
+<!--    <xacro:wheel prefix="wheel_front_right" x_reflect="1" y_reflect="-1"/>-->
+<!--    <xacro:wheel prefix="wheel_rear_right" x_reflect="-1" y_reflect="-1"/>-->
+
+<!--    <gazebo>-->
+<!--      <plugin-->
+<!--          filename="gz-sim-diff-drive-system"-->
+<!--          name="gz::sim::systems::DiffDrive">-->
+<!--        <left_joint>wheel_front_left_joint</left_joint>-->
+<!--        <left_joint>wheel_rear_left_joint</left_joint>-->
+<!--        <right_joint>wheel_front_right_joint</right_joint>-->
+<!--        <right_joint>wheel_rear_right_joint</right_joint>-->
+
+<!--        <wheel_separation>2.05</wheel_separation>-->
+<!--        <wheel_radius>0.15</wheel_radius>-->
+
+<!--        &lt;!&ndash;    <min_velocity>0.0</min_velocity>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <max_velocity>5.0</max_velocity>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <min_acceleration>0.0</min_acceleration>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <max_acceleration>1.0</max_acceleration>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <min_jerk>1.0</min_jerk>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <max_jerk>3.0</max_jerk>&ndash;&gt;-->
+
+<!--        <odom_publish_frequency>10</odom_publish_frequency>-->
+<!--        <topic>cmd_vel</topic>-->
+<!--        <odom_topic>odom</odom_topic>-->
+<!--        <tf_topic>/tf</tf_topic>-->
+<!--        <frame_id>odom</frame_id>-->
+<!--        <child_frame_id>base_link</child_frame_id>-->
+<!--      </plugin>-->
+
+<!--&lt;!&ndash;      <plugin filename="gz-sim-joint-state-publisher-system"&ndash;&gt;-->
+<!--&lt;!&ndash;              name="gz::sim::systems::JointStatePublisher">&ndash;&gt;-->
+<!--&lt;!&ndash;        <topic>joint_states</topic>&ndash;&gt;-->
+<!--&lt;!&ndash;        <joint_name>wheel_front_left_joint</joint_name>&ndash;&gt;-->
+<!--&lt;!&ndash;        <joint_name>wheel_rear_left_joint</joint_name>&ndash;&gt;-->
+<!--&lt;!&ndash;        <joint_name>wheel_front_right_joint</joint_name>&ndash;&gt;-->
+<!--&lt;!&ndash;        <joint_name>wheel_rear_right_joint</joint_name>&ndash;&gt;-->
+<!--&lt;!&ndash;        <joint_name>base_joint</joint_name>&ndash;&gt;-->
+<!--&lt;!&ndash;      </plugin>&ndash;&gt;-->
+<!--    </gazebo>-->
+
+
 
   </xacro:macro>
 

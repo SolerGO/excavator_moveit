@@ -1,4 +1,4 @@
-FROM osrf/ros:jazzy-desktop
+FROM osrf/ros:humble-desktop
 
 # Add user to video group to allow access to webcam
 RUN #usermod --append --groups video $USERNAME
@@ -20,16 +20,16 @@ RUN apt-get update
 #Install ros_qz
 RUN apt-get update &&\
     apt install -y \
-    ros-jazzy-ros-gz \
-    ros-jazzy-moveit \
-    ros-jazzy-joint-state-publisher \
-    ros-jazzy-joint-state-publisher-gui \
-    ros-jazzy-controller-manager \
-    ros-jazzy-gripper-controllers \
-    ros-jazzy-ros2-control \
-    ros-jazzy-ros2-controllers \
-    ros-jazzy-gz-ros2-control \
-    ros-jazzy-moveit-planners-chomp
+    ros-humble-ros-gz \
+    ros-humble-moveit
+#    ros-jazzy-joint-state-publisher \
+#    ros-jazzy-joint-state-publisher-gui \
+#    ros-jazzy-controller-manager \
+#    ros-jazzy-gripper-controllers \
+#    ros-jazzy-ros2-control \
+#    ros-jazzy-ros2-controllers \
+#    ros-jazzy-gz-ros2-control \
+#    ros-jazzy-moveit-planners-chomp
 
 
 # Source the ROS setup file

@@ -29,7 +29,7 @@ def generate_launch_description():
     # Constants for paths to different files and folders
     package_name_gazebo = 'excavator_gazebo'
     package_name_description = 'excavator_hardware_interface'
-    # package_name_moveit = 'mycobot_moveit_config'
+    package_name_moveit = 'moveit2_excavator_config'
 
     default_robot_name = 'excavator'
     gazebo_models_path = 'models'
@@ -43,7 +43,7 @@ def generate_launch_description():
     pkg_share_gazebo = FindPackageShare(package=package_name_gazebo).find(package_name_gazebo)
     pkg_share_description = FindPackageShare(
         package=package_name_description).find(package_name_description)
-    # pkg_share_moveit = FindPackageShare(package=package_name_moveit).find(package_name_moveit)
+    pkg_share_moveit = FindPackageShare(package=package_name_moveit).find(package_name_moveit)
 
     gazebo_models_path = os.path.join(pkg_share_gazebo, gazebo_models_path)
     default_ros_gz_bridge_config_file_path = os.path.join(
@@ -93,7 +93,7 @@ def generate_launch_description():
     # GUI and visualization arguments
     declare_jsp_gui_cmd = DeclareLaunchArgument(
         name='jsp_gui',
-        default_value='true',
+        default_value='false',
         description='Flag to enable joint_state_publisher_gui')
 
     declare_use_lidar_cmd = DeclareLaunchArgument(
@@ -168,15 +168,15 @@ def generate_launch_description():
     )
 
     # Include ROS 2 Controllers launch file if enabled
-    # load_controllers_cmd = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource([
-    #         os.path.join(pkg_share_moveit, 'launch', 'load_ros2_controllers.launch.py')
-    #     ]),
-    #     launch_arguments={
-    #         'use_sim_time': use_sim_time
-    #     }.items(),
-    #     condition=IfCondition(load_controllers)
-    # )
+    load_controllers_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(pkg_share_moveit, 'launch', 'load_ros2_controllers.launch.py')
+        ]),
+        launch_arguments={
+            'use_sim_time': use_sim_time
+        }.items(),
+        condition=IfCondition(load_controllers)
+    )
 
     # Set Gazebo model path
     set_env_vars_resources = AppendEnvironmentVariable(
@@ -242,7 +242,7 @@ def generate_launch_description():
     # Add the actions to the launch description
     ld.add_action(set_env_vars_resources)
     ld.add_action(robot_state_publisher_cmd)
-    # ld.add_action(load_controllers_cmd)
+    ld.add_action(load_controllers_cmd)
     ld.add_action(start_gazebo_cmd)
     ld.add_action(start_gazebo_ros_bridge_cmd)
     ld.add_action(start_gazebo_ros_spawner_cmd)

@@ -25,27 +25,26 @@ def process_ros2_controllers_config(context):
     """
 
     # Get the configuration values
-
-
-    home = str(Path.home())
+    # prefix = LaunchConfiguration('prefix').perform(context)
+    # flange_link = LaunchConfiguration('flange_link').perform(context)
+    # robot_name = LaunchConfiguration('robot_name').perform(context)
 
     # Define both source and install paths
     src_config_path = os.path.join(
-        home,
-        'ros2_ws/src/mycobot_ros2/mycobot_moveit_config/config',
-        robot_name
+        '/ws/src/excavator_moveit/moveit2_excavator_config/config',
     )
     install_config_path = os.path.join(
-        home,
-        'ros2_ws/install/mycobot_moveit_config/share/mycobot_moveit_config/config',
-        robot_name
+        '/ws/install/moveit2_excavator_config/share/moveit2_excavator_config/config',
     )
 
     # Read from source template
     template_path = os.path.join(src_config_path, 'ros2_controllers_template.yaml')
     with open(template_path, 'r', encoding='utf-8') as file:
-        template_content = file.read()
+        processed_content = file.read()
 
+    # Create processed content (leaving template untouched)
+    # processed_content = template_content.replace('${prefix}', prefix)
+    # processed_content = processed_content.replace('${flange_link}', flange_link)
 
     # Write processed content to both source and install directories
     for config_path in [src_config_path, install_config_path]:
@@ -97,7 +96,7 @@ def generate_launch_description():
 
     declare_jsp_gui_cmd = DeclareLaunchArgument(
         name='jsp_gui',
-        default_value='true',
+        default_value='false',
         choices=['true', 'false'],
         description='Flag to enable joint_state_publisher_gui')
 
@@ -169,7 +168,7 @@ def generate_launch_description():
     ld = LaunchDescription(ARGUMENTS)
 
     # Process the controller configuration before starting nodes
-    # ld.add_action(OpaqueFunction(function=process_ros2_controllers_config))
+    ld.add_action(OpaqueFunction(function=process_ros2_controllers_config))
 
     # Declare the launch options
     ld.add_action(declare_jsp_gui_cmd)

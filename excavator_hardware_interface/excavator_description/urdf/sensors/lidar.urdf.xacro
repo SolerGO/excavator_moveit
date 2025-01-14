@@ -50,7 +50,7 @@
       <gazebo reference="lidar_link">
         <sensor type="gpu_lidar" name="ouster_lidar">
           <pose>0 0 0 0 0 0</pose>
-          <ray>
+          <lidar>
             <scan>
               <horizontal>
                 <samples>${lidar_resolution}</samples>
@@ -70,12 +70,7 @@
               <max>${lidar_max_dist}</max>
               <resolution>0.001</resolution>
             </range>
-<!--            <noise>-->
-<!--              <type>gaussian</type>-->
-<!--              <mean>${mean}</mean>-->
-<!--              <stddev>${stddev}</stddev>-->
-<!--            </noise>-->
-          </ray>
+          </lidar>
           <update_rate>${lidar_rate}</update_rate>
           <always_on>1</always_on>
           <visualize>true</visualize>
