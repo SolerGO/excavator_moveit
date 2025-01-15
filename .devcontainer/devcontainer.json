@@ -3,7 +3,7 @@
   "dockerFile": "Dockerfile",
   "privileged": true,
   "runArgs": [
-    "--network=host",
+    "--net=host",
     "--pid=host",
     "--ipc=host",
     "-e", "DISPLAY=${env:DISPLAY}",

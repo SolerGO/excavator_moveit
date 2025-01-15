@@ -6,7 +6,7 @@
 
       <xacro:property name="M_PI" value="3.1415926535897931" />
 
-      <xacro:property name="lidar_rate" value="10.0"/>
+      <xacro:property name="lidar_rate" value="50.0"/>
       <xacro:property name="lidar_min_dist" value="0.2"/>
       <xacro:property name="lidar_max_dist" value="130.0"/>
       <xacro:property name="lidar_field_view_horizontal_max" value="3.14159"/>
