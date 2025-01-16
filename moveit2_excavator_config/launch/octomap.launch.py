@@ -11,16 +11,7 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 
 def generate_launch_description():
-    """
-    Generate a launch description for MoveIt 2 with myCobot robot.
 
-    This function sets up the necessary configuration and nodes to launch MoveIt 2
-    for controlling a myCobot robotic arm. It includes setting up paths to config files,
-    declaring launch arguments, configuring the move_group node, and optionally starting RViz.
-
-    Returns:
-        LaunchDescription: A complete launch description for the MoveIt 2 system
-    """
     # Constants for paths to different files and folders
     package_name_moveit_config = 'moveit2_excavator_config'
 
@@ -83,7 +74,7 @@ def generate_launch_description():
             .to_moveit_configs()
         )
 
-        octomap_config = {'octomap_frame': 'lidar_link',
+        octomap_config = {'map_frame': 'lidar_link',
                           'octomap_resolution': 0.2,
                           'max_range': 15.0}
 
@@ -92,21 +83,12 @@ def generate_launch_description():
 
         # Create move_group node
         start_move_group_node_cmd = Node(
-            package="moveit_ros_move_group",
-            executable="move_group",
+            package="moveit_ros_occupancy_map_monitor",
+            executable="moveit_ros_occupancy_map_server",
             output="screen",
             parameters=[
-                moveit_config.to_dict(),
-                {'use_sim_time': False},
-                {'start_state': {'content': initial_positions_file_path}},
-                move_group_capabilities,
-                octomap_config,
-                {'monitor_dynamics': True},
-                {'publish_planning_scene_hz': 10.0},
+                octomap_config
             ],
-            arguments=["--ros-args",
-                       "--log-level",
-                       "move_group:=debug"],
         )
 
         return [start_move_group_node_cmd]

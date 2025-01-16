@@ -1,4 +1,4 @@
-FROM osrf/ros:jazzy-desktop
+FROM osrf/ros:jazzy-desktop-full
 
 # Add user to video group to allow access to webcam
 RUN #usermod --append --groups video $USERNAME
@@ -29,7 +29,9 @@ RUN apt-get update &&\
     ros-jazzy-ros2-control \
     ros-jazzy-ros2-controllers \
     ros-jazzy-gz-ros2-control \
-    ros-jazzy-moveit-planners-chomp
+    ros-jazzy-moveit-planners-chomp \
+    ros-jazzy-moveit-ros-perception
+
 
 
 # Source the ROS setup file
