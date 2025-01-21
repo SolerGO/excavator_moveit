@@ -8,11 +8,11 @@
 
       <xacro:property name="lidar_rate" value="20.0"/>
       <xacro:property name="lidar_min_dist" value="0.2"/>
-      <xacro:property name="lidar_max_dist" value="130.0"/>
-      <xacro:property name="lidar_field_view_horizontal_max" value="3.14159"/>
-      <xacro:property name="lidar_field_view_horizontal_min" value="-3.14159"/>
-      <xacro:property name="lidar_field_view_vertical_max" value="0.785398"/>
-      <xacro:property name="lidar_field_view_vertical_min" value="-0.785398"/>
+      <xacro:property name="lidar_max_dist" value="50.0"/>
+      <xacro:property name="lidar_field_view_horizontal_max" value="1.56"/>
+      <xacro:property name="lidar_field_view_horizontal_min" value="-1.56"/>
+      <xacro:property name="lidar_field_view_vertical_max" value="0.45398"/>
+      <xacro:property name="lidar_field_view_vertical_min" value="-0.45398"/>
       <xacro:property name="horizontal_resolution" value="0.18"/>
       <xacro:property name="lidar_resolution" value="720"/>
       <xacro:property name="lidar_channels" value="32"/>
@@ -26,12 +26,12 @@
           <inertia ixx="0.001"  ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
         </inertial>
 
-        <collision>
-          <origin xyz="0 0 0" rpy="0 0 0"/>
-          <geometry>
-            <cylinder radius="0.0508" length="0.055"/>
-          </geometry>
-        </collision>
+<!--        <collision>-->
+<!--          <origin xyz="0 0 0" rpy="0 0 0"/>-->
+<!--          <geometry>-->
+<!--            <cylinder radius="0.0508" length="0.055"/>-->
+<!--          </geometry>-->
+<!--        </collision>-->
 
         <visual>
           <origin xyz="0 0 0" rpy="0 0 0"/>

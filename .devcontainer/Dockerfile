@@ -30,7 +30,9 @@ RUN apt-get update &&\
     ros-jazzy-ros2-controllers \
     ros-jazzy-gz-ros2-control \
     ros-jazzy-moveit-planners-chomp \
-    ros-jazzy-moveit-ros-perception
+    ros-jazzy-moveit-ros-perception \
+    ros-jazzy-moveit-ros-visualization \
+    ros-jazzy-moveit-visual-tools
 
 
 
