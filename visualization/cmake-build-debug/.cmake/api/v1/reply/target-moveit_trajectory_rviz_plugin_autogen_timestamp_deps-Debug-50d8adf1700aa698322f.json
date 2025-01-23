@@ -1,0 +1,34 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"trajectory_rviz_plugin/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "moveit_trajectory_rviz_plugin_core::@ea9655eb8b0ab182c77d"
+		}
+	],
+	"id" : "moveit_trajectory_rviz_plugin_autogen_timestamp_deps::@ea9655eb8b0ab182c77d",
+	"isGeneratorProvided" : true,
+	"name" : "moveit_trajectory_rviz_plugin_autogen_timestamp_deps",
+	"paths" : 
+	{
+		"build" : "trajectory_rviz_plugin",
+		"source" : "trajectory_rviz_plugin"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

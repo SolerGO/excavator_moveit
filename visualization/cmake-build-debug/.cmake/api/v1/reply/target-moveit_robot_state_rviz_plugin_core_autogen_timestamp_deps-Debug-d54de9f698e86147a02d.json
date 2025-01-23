@@ -1,0 +1,34 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"robot_state_rviz_plugin/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "moveit_rviz_plugin_render_tools::@11af576cd519c4ccae31"
+		}
+	],
+	"id" : "moveit_robot_state_rviz_plugin_core_autogen_timestamp_deps::@3cccd1ee7f0cc842f242",
+	"isGeneratorProvided" : true,
+	"name" : "moveit_robot_state_rviz_plugin_core_autogen_timestamp_deps",
+	"paths" : 
+	{
+		"build" : "robot_state_rviz_plugin",
+		"source" : "robot_state_rviz_plugin"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}
